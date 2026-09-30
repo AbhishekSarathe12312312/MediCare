@@ -26,7 +26,7 @@ const BookAppointment = () => {
     const fetchDoctor = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/doctor/get-doctors",
+          `${import.meta.env.VITE_API_URL}/api/doctor/get-doctors`,
         );
 
         if (response.data.success) {
@@ -80,7 +80,7 @@ const BookAppointment = () => {
       // STEP 1: CREATE RAZORPAY ORDER
       // --------------------------------
       const paymentResponse = await axios.post(
-        "http://localhost:8000/api/payment/create-payment",
+        `${import.meta.env.VITE_API_URL}/api/payment/create-payment`,
         {
           amount: doctor.consultationFee,
         },
@@ -119,7 +119,7 @@ const BookAppointment = () => {
             // STEP 3: VERIFY PAYMENT
             // --------------------------------
             const verifyResponse = await axios.post(
-              "http://localhost:8000/api/payment/verify-payment",
+              `${import.meta.env.VITE_API_URL}/api/payment/verify-payment`,
               {
                 razorpay_order_id: paymentResult.razorpay_order_id,
 
@@ -144,7 +144,7 @@ const BookAppointment = () => {
             // STEP 4: CREATE APPOINTMENT
             // --------------------------------
             const appointmentResponse = await axios.post(
-              "http://localhost:8000/api/appointment/book-appointment",
+              `${import.meta.env.VITE_API_URL}/api/appointment/book-appointment`,
               {
                 doctorId,
                 appointmentDate,

@@ -13,10 +13,9 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://medi-care-lemon-eta.vercel.app",
     credentials: true,
   }),
 );

@@ -50,7 +50,7 @@ const ManagePatients = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/user/admin/patients",
+        `${import.meta.env.VITE_API_URL}/api/user/admin/patients`,
         {
           params: {
             search: search.trim(),
@@ -149,7 +149,7 @@ const ManagePatients = () => {
       setActionLoading(patientId);
 
       const response = await axios.patch(
-        `http://localhost:8000/api/user/admin/patients/${patientId}/status`,
+        `${import.meta.env.VITE_API_URL}/api/user/admin/patients/${patientId}/status`,
         {},
         {
           headers: {
@@ -228,7 +228,7 @@ const ManagePatients = () => {
       setActionLoading(patientId);
 
       const response = await axios.delete(
-        `http://localhost:8000/api/user/admin/patients/${patientId}`,
+        `${import.meta.env.VITE_API_URL}/api/user/admin/patients/${patientId}`,
         {
           headers: {
             Authorization: `Bearer ${adminToken}`,

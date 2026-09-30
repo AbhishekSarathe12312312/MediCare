@@ -54,7 +54,7 @@ const DoctorDashboard = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/appointment/doctor-appointments",
+        `${import.meta.env.VITE_API_URL}/api/appointment/doctor-appointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

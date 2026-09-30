@@ -31,7 +31,7 @@ const DoctorAppointments = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:8000/api/appointment/doctor-appointments",
+        `${import.meta.env.VITE_API_URL}/api/appointment/doctor-appointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ const DoctorAppointments = () => {
       const token = localStorage.getItem("doctorToken");
 
       const response = await axios.put(
-        `http://localhost:8000/api/appointment/update-status/${appointmentId}`,
+        `${import.meta.env.VITE_API_URL}/api/appointment/update-status/${appointmentId}`,
         { status },
         {
           headers: {

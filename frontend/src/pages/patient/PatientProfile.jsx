@@ -39,7 +39,7 @@ const PatientProfile = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:8000/api/user/profile",
+        `${import.meta.env.VITE_API_URL}/api/user/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -128,7 +128,7 @@ const PatientProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        "http://localhost:8000/api/user/profile-update",
+        `${import.meta.env.VITE_API_URL}/api/user/profile-update`,
         {
           name: formData.name,
           phone: formData.phone,

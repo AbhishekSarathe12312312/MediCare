@@ -43,7 +43,7 @@ const ManageDoctors = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/doctor/admin/doctors",
+        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors`,
         {
           params: {
             search: searchValue,
@@ -134,7 +134,7 @@ const ManageDoctors = () => {
       setActionLoading(doctor._id);
 
       const response = await axios.patch(
-        `http://localhost:8000/api/doctor/admin/doctors/${doctor._id}/status`,
+        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors/${doctor._id}/status`,
         {},
         {
           headers: {
@@ -183,7 +183,7 @@ const ManageDoctors = () => {
       setActionLoading(doctor._id);
 
       const response = await axios.delete(
-        `http://localhost:8000/api/doctor/admin/doctors/${doctor._id}`,
+        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors/${doctor._id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

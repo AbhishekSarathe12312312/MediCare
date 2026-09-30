@@ -28,7 +28,7 @@ const ManageAppointments = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:8000/api/appointment/admin/appointments",
+        `${import.meta.env.VITE_API_URL}/api/appointment/admin/appointments`,
         {
           headers: {
             Authorization: `Bearer ${adminToken}`,

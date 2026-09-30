@@ -22,7 +22,7 @@ const VerifyOTP = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/user/verify-otp",
+        `${import.meta.env.VITE_API_URL}/api/user/verify-otp`,
         {
           ...registrationData,
           otp,

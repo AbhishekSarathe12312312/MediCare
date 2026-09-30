@@ -52,7 +52,7 @@ const EditDoctor = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/doctor/admin/doctors",
+        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -236,7 +236,7 @@ const EditDoctor = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:8000/api/doctor/admin/doctors/${doctorId}`,
+        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors/${doctorId}`,
         data,
         {
           headers: {

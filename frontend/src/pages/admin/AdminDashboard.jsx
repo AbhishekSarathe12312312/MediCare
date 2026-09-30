@@ -44,7 +44,7 @@ const AdminDashboard = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/admin/dashboard",
+        `${import.meta.env.VITE_API_URL}/api/admin/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

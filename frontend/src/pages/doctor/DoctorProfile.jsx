@@ -65,7 +65,7 @@ const DoctorProfile = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://localhost:8000/api/doctor/profile",
+        "${import.meta.env.VITE_API_URL}/api/doctor/profile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -220,7 +220,7 @@ const DoctorProfile = () => {
       }
 
       const response = await axios.put(
-        "http://localhost:8000/api/doctor/profile-update",
+        "${import.meta.env.VITE_API_URL}/api/doctor/profile-update",
         data,
         {
           headers: {

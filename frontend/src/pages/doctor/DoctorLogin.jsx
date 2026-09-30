@@ -44,7 +44,7 @@ const DoctorLogin = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8000/api/doctor/login",
+        `${import.meta.env.VITE_API_URL}/api/doctor/login`,
         formData,
       );
 

@@ -21,7 +21,7 @@ const Appointments = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:8000/api/appointment/my-appointments",
+        `${import.meta.env.VITE_API_URL}/api/appointment/my-appointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -103,7 +103,7 @@ const Appointments = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `http://localhost:8000/api/appointment/cancel-appointment/${appointmentId}`,
+        `${import.meta.env.VITE_API_URL}/api/appointment/cancel-appointment/${appointmentId}`,
         {},
         {
           headers: {

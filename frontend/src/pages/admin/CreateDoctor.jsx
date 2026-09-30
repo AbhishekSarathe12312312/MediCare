@@ -90,7 +90,7 @@ const CreateDoctor = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/api/doctor/create-doctor",
+        `${import.meta.env.VITE_API_URL}/api/doctor/create-doctor`,
         data,
         {
           headers: {

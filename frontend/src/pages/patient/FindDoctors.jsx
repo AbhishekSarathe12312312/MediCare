@@ -33,7 +33,7 @@ const FindDoctors = () => {
         setLoading(true);
 
         const response = await axios.get(
-          "http://localhost:8000/api/doctor/get-doctors",
+          `${import.meta.env.VITE_API_URL}/api/doctor/get-doctors`,
         );
 
         if (response.data.success) {

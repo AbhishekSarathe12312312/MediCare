@@ -186,7 +186,7 @@ const DoctorDashboard = () => {
           </div>
 
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-            Welcome back, Dr. {doctor.name}
+            Welcome back, {doctor.name}
           </h2>
 
           <p className="mt-1 text-sm text-gray-400">

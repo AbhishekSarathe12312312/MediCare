@@ -9,6 +9,7 @@ import {
   UserRound,
   Stethoscope,
   ShieldCheck,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -116,19 +117,29 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#07111f] text-white flex items-center justify-center px-3 py-5 sm:px-5 sm:py-6 lg:px-6 selection:bg-cyan-500 selection:text-gray-950">
       <div className="w-full max-w-xs sm:max-w-sm lg:max-w-md mx-auto">
-        {/* Logo / Header */}
-        <div className="text-center mb-4 sm:mb-5">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-            Welcome back
-          </h1>
-
-          <p className="text-[11px] sm:text-xs lg:text-sm text-gray-400 mt-1">
-            Login to your MediCare account
-          </p>
-        </div>
-
         {/* Login Card */}
-        <div className="bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-xl shadow-cyan-500/5">
+        <div className="relative bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-xl shadow-cyan-500/5">
+          {/* Home Back Arrow */}
+          <Link
+            to="/"
+            aria-label="Go to home"
+            className="absolute top-3 left-3 sm:top-4 sm:left-4 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-500/40 hover:text-cyan-300 transition-all duration-300 hover:-translate-x-0.5"
+          >
+            <ArrowLeft size={17} />
+          </Link>
+
+          {/* Logo / Header */}
+          <div className="text-center mb-4 sm:mb-5 pt-2">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
+              Welcome back
+            </h1>
+
+            <p className="text-[11px] sm:text-xs lg:text-sm text-gray-400 mt-1">
+              Login to your MediCare account
+            </p>
+          </div>
+
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
             {/* Role */}
             <div>
@@ -153,14 +164,13 @@ const Login = () => {
                       role: "patient",
                     })
                   }
-                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition-all duration-300 cursor-pointer ${
                     formData.role === "patient"
                       ? "bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-sm shadow-cyan-500/10"
                       : "bg-[#07111f] border-cyan-500/10 text-gray-400 hover:border-cyan-500/30 hover:text-cyan-300"
                   }`}
                 >
                   <UserRound size={16} className="sm:w-[18px] sm:h-[18px]" />
-
                   <span className="text-[10px] sm:text-[11px] font-semibold">
                     Patient
                   </span>
@@ -175,14 +185,13 @@ const Login = () => {
                       role: "doctor",
                     })
                   }
-                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition-all duration-300 cursor-pointer ${
                     formData.role === "doctor"
                       ? "bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-sm shadow-cyan-500/10"
                       : "bg-[#07111f] border-cyan-500/10 text-gray-400 hover:border-cyan-500/30 hover:text-cyan-300"
                   }`}
                 >
                   <Stethoscope size={16} className="sm:w-[18px] sm:h-[18px]" />
-
                   <span className="text-[10px] sm:text-[11px] font-semibold">
                     Doctor
                   </span>
@@ -197,14 +206,13 @@ const Login = () => {
                       role: "admin",
                     })
                   }
-                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition cursor-pointer ${
+                  className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-2.5 rounded-lg border transition-all duration-300 cursor-pointer ${
                     formData.role === "admin"
                       ? "bg-cyan-500/10 border-cyan-500 text-cyan-400 shadow-sm shadow-cyan-500/10"
                       : "bg-[#07111f] border-cyan-500/10 text-gray-400 hover:border-cyan-500/30 hover:text-cyan-300"
                   }`}
                 >
                   <ShieldCheck size={16} className="sm:w-[18px] sm:h-[18px]" />
-
                   <span className="text-[10px] sm:text-[11px] font-semibold">
                     Admin
                   </span>
@@ -279,7 +287,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-10 sm:h-11 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 disabled:from-gray-800 disabled:to-gray-800 disabled:text-gray-500 text-gray-950 font-bold rounded-lg transition shadow-lg shadow-cyan-500/20 text-[11px] sm:text-xs cursor-pointer disabled:cursor-not-allowed"
+              className="w-full h-10 sm:h-11 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 disabled:from-gray-800 disabled:to-gray-800 disabled:text-gray-500 text-gray-950 font-bold rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/20 text-[11px] sm:text-xs cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? "Logging in..." : "Login"}
             </button>

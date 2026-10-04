@@ -81,7 +81,7 @@ const FindDoctors = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 pt-16 selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 mt-18 selection:bg-cyan-500 selection:text-slate-950">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}

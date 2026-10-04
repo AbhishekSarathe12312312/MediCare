@@ -128,7 +128,7 @@ const Appointments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 pt-16 selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 mt-18 selection:bg-cyan-500 selection:text-slate-950">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-6">
@@ -174,7 +174,7 @@ const Appointments = () => {
             </p>
 
             <button
-              onClick={() => navigate("/patient/find-doctors")}
+              onClick={() => navigate("/find-doctors")}
               className="mt-6 rounded-xl bg-cyan-500 px-6 py-3 text-xs font-semibold text-slate-950 shadow-lg shadow-cyan-500/25 transition-all hover:bg-cyan-400 hover:shadow-cyan-400/40 active:scale-95 cursor-pointer"
             >
               Find a Doctor

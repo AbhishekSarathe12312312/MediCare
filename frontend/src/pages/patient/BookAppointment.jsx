@@ -36,7 +36,7 @@ const BookAppointment = () => {
 
           if (!selectedDoctor) {
             toast.error("Doctor not found");
-            navigate("/patient/find-doctors");
+            navigate("/find-doctors");
             return;
           }
 
@@ -222,11 +222,11 @@ const BookAppointment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 pt-16 selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 mt-18 selection:bg-cyan-500 selection:text-slate-950">
       <div className="mx-auto max-w-5xl">
         {/* Back Button */}
         <button
-          onClick={() => navigate("/patient/find-doctors")}
+          onClick={() => navigate("/find-doctors")}
           className="group mb-4 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-md transition hover:border-cyan-500/40 hover:text-white cursor-pointer"
         >
           <ArrowLeft

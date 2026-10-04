@@ -58,7 +58,7 @@ const Home = () => {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/20 via-[#07111f] to-[#07111f]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-17 sm:py-28 lg:py-32">
           <div className="max-w-3xl">
             <span className="inline-block rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 text-xs sm:text-sm font-semibold tracking-wide text-cyan-400">
               Welcome to MediCare
@@ -79,7 +79,7 @@ const Home = () => {
 
             <div className="mt-8 sm:mt-10 flex flex-wrap gap-4">
               <button
-                onClick={() => navigate("/patient/find-doctors")}
+                onClick={() => navigate("/find-doctors")}
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 px-6 py-3 font-bold text-gray-950 transition shadow-lg shadow-cyan-500/20 text-xs sm:text-sm cursor-pointer"
               >
                 Find Doctors
@@ -240,7 +240,7 @@ const Home = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/find-doctors")}
+            onClick={() => navigate("/find-doctors")}
             className="mt-6 sm:mt-7 rounded-xl bg-[#07111f] px-6 py-3 font-bold text-white transition hover:bg-[#0b1728] shadow-lg text-xs sm:text-sm cursor-pointer"
           >
             Find Doctors

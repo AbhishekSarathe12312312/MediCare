@@ -38,7 +38,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950">
+    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950 mt-7">
       {/* Hero */}
       <section className="bg-gradient-to-br from-cyan-950/20 via-[#07111f] to-[#07111f]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
@@ -162,7 +162,7 @@ const About = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/find-doctors")}
+            onClick={() => navigate("/find-doctors")}
             className="mt-6 sm:mt-7 bg-[#07111f] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#0b1728] transition shadow-lg text-xs sm:text-sm cursor-pointer"
           >
             Find Doctors

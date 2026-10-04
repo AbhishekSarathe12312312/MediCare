@@ -122,7 +122,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07111f] text-white">
+    <div className="min-h-screen bg-[#07111f] mt-5 text-white">
       <main className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
         <form
           onSubmit={handleSubmit}

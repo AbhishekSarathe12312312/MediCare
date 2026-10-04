@@ -103,7 +103,7 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950">
+    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950 mt-4">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/20 via-[#07111f] to-[#07111f]" />
@@ -128,7 +128,7 @@ const Services = () => {
             </p>
 
             <button
-              onClick={() => navigate("/patient/find-doctors")}
+              onClick={() => navigate("/find-doctors")}
               className="mt-6 sm:mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 px-6 py-3.5 rounded-xl font-bold text-gray-950 transition shadow-lg shadow-cyan-500/20 text-xs sm:text-sm cursor-pointer"
             >
               Find a Doctor
@@ -200,7 +200,7 @@ const Services = () => {
 
                 {/* Button */}
                 <button
-                  onClick={() => navigate("/patient/find-doctors")}
+                  onClick={() => navigate("/find-doctors")}
                   className="mt-6 inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-xs sm:text-sm font-semibold cursor-pointer"
                 >
                   Find Doctor
@@ -293,7 +293,7 @@ const Services = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/find-doctors")}
+            onClick={() => navigate("/find-doctors")}
             className="mt-6 sm:mt-8 inline-flex items-center gap-2 bg-[#07111f] text-white px-7 py-3.5 rounded-xl font-bold hover:bg-[#0b1728] transition shadow-lg text-xs sm:text-sm cursor-pointer"
           >
             Find Doctors

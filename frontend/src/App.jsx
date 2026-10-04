@@ -47,6 +47,9 @@ const AppContent = () => {
       {!hideNavbar && <Navbar />}
 
       <Routes>
+        {/* publically accessible */}
+        <Route path="/find-doctors" element={<FindDoctors />} />
+
         {/* ================= PATIENT AUTH ================= */}
 
         <Route path="/patient/register" element={<PatientRegister />} />
@@ -60,15 +63,6 @@ const AppContent = () => {
           element={
             <ProtectedRoute role="patient">
               <PatientDashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/patient/find-doctors"
-          element={
-            <ProtectedRoute role="patient">
-              <FindDoctors />
             </ProtectedRoute>
           }
         />

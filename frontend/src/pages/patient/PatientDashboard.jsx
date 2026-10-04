@@ -59,7 +59,7 @@ const PatientDashboard = () => {
   ];
 
  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950 pt-16">
+    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950 mt-18">
       {/* Dashboard Content */}
       <main>
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -107,7 +107,7 @@ const PatientDashboard = () => {
 
               <div className="mt-4 flex flex-wrap gap-3">
                 <button
-                  onClick={() => navigate("/patient/find-doctors")}
+                  onClick={() => navigate("/find-doctors")}
                   className="inline-flex items-center gap-2.5 rounded-xl bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/25 transition-all duration-200 hover:bg-cyan-400 hover:shadow-cyan-400/40 active:scale-95 cursor-pointer"
                 >
                   Find a Doctor
@@ -211,7 +211,7 @@ const PatientDashboard = () => {
 
               <div className="space-y-2.5 p-4 flex-1">
                 <button
-                  onClick={() => navigate("/patient/find-doctors")}
+                  onClick={() => navigate("/find-doctors")}
                   className="group flex w-full items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-950/60 p-3 text-left transition-all duration-200 hover:border-cyan-500/40 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-950/20 active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
@@ -228,7 +228,7 @@ const PatientDashboard = () => {
                 </button>
 
                 <button
-                  onClick={() => navigate("/patient/find-doctors")}
+                  onClick={() => navigate("/find-doctors")}
                   className="group flex w-full items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-950/60 p-3 text-left transition-all duration-200 hover:border-cyan-500/40 hover:bg-slate-900 hover:shadow-lg hover:shadow-cyan-950/20 active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-3">

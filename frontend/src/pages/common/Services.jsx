@@ -125,7 +125,7 @@ const Services = () => {
             </p>
 
             <button
-              onClick={() => navigate("/patient/doctors")}
+              onClick={() => navigate("/patient/find-doctors")}
               className="mt-8 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3.5 rounded-xl font-medium transition"
             >
               Find a Doctor
@@ -191,7 +191,7 @@ const Services = () => {
 
                 {/* Button */}
                 <button
-                  onClick={() => navigate("/patient/doctors")}
+                  onClick={() => navigate("/patient/find-doctors")}
                   className="mt-6 flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium"
                 >
                   Find Doctor
@@ -276,7 +276,7 @@ const Services = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/doctors")}
+            onClick={() => navigate("/patient/find-doctors")}
             className="mt-8 inline-flex items-center gap-2 bg-white text-blue-700 px-7 py-3.5 rounded-xl font-semibold hover:bg-blue-50 transition"
           >
             Find Doctors

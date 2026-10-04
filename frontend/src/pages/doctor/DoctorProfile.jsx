@@ -22,6 +22,7 @@ import {
   CheckCircle2,
   Power,
   Camera,
+  Loader2,
 } from "lucide-react";
 
 const DoctorProfile = () => {
@@ -50,10 +51,10 @@ const DoctorProfile = () => {
 
   // Fetch doctor profile
   useEffect(() => {
-    const token = localStorage.getItem("doctorToken");
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
-      navigate("/doctor/login");
+      navigate("/login");
       return;
     }
 
@@ -65,7 +66,7 @@ const DoctorProfile = () => {
       setLoading(true);
 
       const response = await axios.get(
-        "${import.meta.env.VITE_API_URL}/api/doctor/profile",
+        `${import.meta.env.VITE_API_URL}/api/doctor/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,25 +93,25 @@ const DoctorProfile = () => {
 
         setPreviewImage(doctorData.profileImage || "");
 
-        // Keep latest doctor data in localStorage
-        localStorage.setItem("doctor", JSON.stringify(doctorData));
+        // Keep latest doctor data in sessionStorage
+        sessionStorage.setItem("user", JSON.stringify(doctorData));
       }
     } catch (error) {
       console.error("FETCH DOCTOR PROFILE ERROR:", error);
 
       if (error.response?.status === 401) {
-        localStorage.removeItem("doctorToken");
-        localStorage.removeItem("doctor");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
 
         toast.error("Session expired. Please login again.");
 
-        navigate("/doctor/login");
+        navigate("/login");
         return;
       }
 
       if (error.response?.status === 403) {
         toast.error("Access denied");
-        navigate("/doctor/login");
+        navigate("/login");
         return;
       }
 
@@ -158,10 +159,10 @@ const DoctorProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("doctorToken");
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
-      navigate("/doctor/login");
+      navigate("/login");
       return;
     }
 
@@ -220,7 +221,7 @@ const DoctorProfile = () => {
       }
 
       const response = await axios.put(
-        "${import.meta.env.VITE_API_URL}/api/doctor/profile-update",
+        `${import.meta.env.VITE_API_URL}/api/doctor/profile-update`,
         data,
         {
           headers: {
@@ -250,7 +251,7 @@ const DoctorProfile = () => {
 
         setProfileImage(null);
 
-        localStorage.setItem("doctor", JSON.stringify(updatedDoctor));
+        sessionStorage.setItem("user", JSON.stringify(updatedDoctor));
 
         toast.success("Profile updated successfully");
       }
@@ -258,12 +259,12 @@ const DoctorProfile = () => {
       console.error("UPDATE DOCTOR PROFILE ERROR:", error);
 
       if (error.response?.status === 401) {
-        localStorage.removeItem("doctorToken");
-        localStorage.removeItem("doctor");
-
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
+        window.dispatchEvent(new Event("authChanged"));
         toast.error("Session expired. Please login again.");
 
-        navigate("/doctor/login");
+        navigate("/login");
         return;
       }
 
@@ -275,21 +276,26 @@ const DoctorProfile = () => {
 
   // Logout
   const handleLogout = () => {
-    localStorage.removeItem("doctorToken");
-    localStorage.removeItem("doctor");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    window.dispatchEvent(new Event("authChanged"));
 
     toast.success("Logged out successfully");
 
-    navigate("/doctor/login");
+    navigate("/login");
   };
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-blue-500" />
-
-          <p className="text-sm text-slate-400">Loading profile...</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#07111f] text-white">
+        <div className="text-center rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-10 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+          <Loader2
+            size={32}
+            className="mx-auto animate-spin text-cyan-400 mb-3"
+          />
+          <p className="text-xs font-medium text-gray-400">
+            Loading profile...
+          </p>
         </div>
       </div>
     );
@@ -300,654 +306,489 @@ const DoctorProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-slate-800 bg-slate-900 transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
-        {/* Logo */}
-        <div className="flex h-20 items-center justify-between border-b border-slate-800 px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600">
-              <Stethoscope size={21} />
-            </div>
-
-            <div>
-              <h1 className="font-bold text-white">MediCare</h1>
-
-              <p className="text-xs text-slate-500">Doctor Portal</p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="text-slate-400 lg:hidden"
-          >
-            <X size={22} />
-          </button>
-        </div>
-
-        {/* Doctor Info */}
-        <div className="border-b border-slate-800 p-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-blue-600/20">
-              {doctor.profileImage ? (
-                <img
-                  src={doctor.profileImage}
-                  alt={doctor.name}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <CircleUserRound size={28} className="text-blue-400" />
-              )}
-            </div>
-
-            <div className="min-w-0">
-              <h2 className="truncate text-sm font-semibold text-white">
-                {doctor.name}
-              </h2>
-
-              <p className="truncate text-xs text-slate-500">
-                {doctor.specialization}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 space-y-2 p-4">
-          <button
-            onClick={() => {
-              navigate("/doctor/dashboard");
-              setSidebarOpen(false);
-            }}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
-          >
-            <LayoutDashboard size={19} />
-            Dashboard
-          </button>
-
-          <button
-            onClick={() => {
-              navigate("/doctor/appointments");
-              setSidebarOpen(false);
-            }}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white"
-          >
-            <CalendarDays size={19} />
-            Appointments
-          </button>
-
-          <button
-            onClick={() => {
-              navigate("/doctor/profile");
-              setSidebarOpen(false);
-            }}
-            className="flex w-full items-center gap-3 rounded-xl bg-blue-600/10 px-4 py-3 text-sm font-medium text-blue-400"
-          >
-            <UserRound size={19} />
-            My Profile
-          </button>
-        </nav>
-
-        {/* Logout */}
-        <div className="border-t border-slate-800 p-4">
-          <button
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10"
-          >
-            <LogOut size={19} />
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <main className="lg:ml-72">
-        {/* Header */}
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 backdrop-blur sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden"
-            >
-              <Menu size={23} />
-            </button>
-
-            <div>
-              <h2 className="text-xl font-bold text-white">My Profile</h2>
-
-              <p className="hidden text-sm text-slate-500 sm:block">
-                Manage your professional profile
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => navigate("/doctor/dashboard")}
-            className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900 px-3 py-2 transition hover:bg-slate-800"
-          >
-            <LayoutDashboard size={17} className="text-blue-400" />
-
-            <span className="hidden text-sm font-medium text-slate-300 sm:block">
-              Dashboard
-            </span>
-          </button>
-        </header>
-
-        <div className="p-4 sm:p-6 lg:p-8">
-          {/* Profile Header */}
-          <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-900 p-6">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                {/* Profile Image */}
-                <div className="relative">
-                  <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-blue-600/10">
-                    {previewImage ? (
-                      <img
-                        src={previewImage}
-                        alt={doctor.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <CircleUserRound size={42} className="text-blue-400" />
-                    )}
-                  </div>
-
-                  {/* Camera Button */}
-                  <label className="absolute -bottom-2 -right-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-slate-900 bg-blue-600 text-white transition hover:bg-blue-500">
-                    <Camera size={16} />
-
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
+    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950 mt-16">
+      {/* Main Container (No Navbar, No Sidebar) */}
+      <main className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:py-10">
+        {/* Profile Header Banner */}
+        <div className="mb-8 rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              {/* Profile Image with Camera Upload */}
+              <div className="relative">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 shadow-sm">
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt={doctor.name}
+                      className="h-full w-full object-cover"
                     />
-                  </label>
+                  ) : (
+                    <CircleUserRound size={36} />
+                  )}
                 </div>
 
-                <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    {doctor.name}
-                  </h1>
-
-                  <p className="mt-1 text-sm text-slate-400">
-                    {doctor.specialization}
-                  </p>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    {doctor.qualification}
-                  </p>
-                </div>
+                <label className="absolute -bottom-2 -right-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-cyan-500/30 bg-cyan-500 text-gray-950 transition hover:bg-cyan-400 shadow-md">
+                  <Camera size={14} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
 
-              {/* Availability */}
-              <button
-                type="button"
-                onClick={handleAvailability}
-                className={`flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-                  formData.available
-                    ? "bg-emerald-500/10 text-emerald-400"
-                    : "bg-red-500/10 text-red-400"
-                }`}
-              >
-                <span
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    formData.available ? "bg-emerald-400" : "bg-red-400"
-                  }`}
-                />
-
-                {formData.available ? "Available" : "Unavailable"}
-              </button>
+              <div>
+                <h2 className="text-xl font-bold text-white tracking-tight">
+                  {doctor.name}
+                </h2>
+                <p className="mt-0.5 text-xs font-semibold text-cyan-400">
+                  {doctor.specialization}
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  {doctor.qualification}
+                </p>
+              </div>
             </div>
 
-            <p className="mt-4 text-xs text-slate-600">
-              Click the camera icon to change your profile image.
-            </p>
+            {/* Availability Toggle Button */}
+            <button
+              type="button"
+              onClick={handleAvailability}
+              className={`flex w-fit items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition cursor-pointer ${
+                formData.available
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                  : "border-red-500/30 bg-red-500/10 text-red-400"
+              }`}
+            >
+              <span
+                className={`h-2 w-2 rounded-full animate-pulse ${
+                  formData.available ? "bg-emerald-400" : "bg-red-400"
+                }`}
+              />
+              {formData.available ? "Available" : "Unavailable"}
+            </button>
           </div>
 
-          {/* Profile Form */}
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-6 xl:grid-cols-3">
+          <p className="mt-4 text-xs text-gray-500">
+            Click the camera icon to update your professional profile photo.
+          </p>
+        </div>
+
+        {/* Profile Form */}
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-6 xl:grid-cols-3">
+            {/* Personal Information & Professional Info */}
+            <div className="xl:col-span-2 space-y-6">
               {/* Personal Information */}
-              <div className="xl:col-span-2">
-                <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
-                      <UserRound size={20} className="text-blue-400" />
-                    </div>
-
-                    <div>
-                      <h2 className="font-semibold text-white">
-                        Personal Information
-                      </h2>
-
-                      <p className="text-xs text-slate-500">
-                        Your basic contact information
-                      </p>
-                    </div>
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400">
+                    <UserRound size={20} />
                   </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    {/* Name */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Full Name
-                      </label>
-
-                      <div className="relative">
-                        <UserRound
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="Enter your name"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Email
-                      </label>
-
-                      <div className="relative">
-                        <Mail
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="email"
-                          value={doctor.email || ""}
-                          disabled
-                          className="w-full cursor-not-allowed rounded-xl border border-slate-800 bg-slate-900 py-3 pl-10 pr-4 text-sm text-slate-500 outline-none"
-                        />
-                      </div>
-
-                      <p className="mt-2 text-xs text-slate-600">
-                        Email cannot be changed here.
-                      </p>
-                    </div>
-
-                    {/* Phone */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Phone Number
-                      </label>
-
-                      <div className="relative">
-                        <Phone
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="Enter phone number"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Location */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Location
-                      </label>
-
-                      <div className="relative">
-                        <MapPin
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="text"
-                          name="location"
-                          value={formData.location}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="Enter location"
-                        />
-                      </div>
-                    </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white tracking-tight">
+                      Personal Information
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Your basic contact details
+                    </p>
                   </div>
                 </div>
 
-                {/* Professional Information */}
-                <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10">
-                      <BriefcaseMedical size={20} className="text-purple-400" />
-                    </div>
-
-                    <div>
-                      <h2 className="font-semibold text-white">
-                        Professional Information
-                      </h2>
-
-                      <p className="text-xs text-slate-500">
-                        Your medical qualifications and fees
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    {/* Specialization */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Specialization
-                      </label>
-
-                      <div className="relative">
-                        <Stethoscope
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="text"
-                          name="specialization"
-                          value={formData.specialization}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="e.g. Cardiologist"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Qualification */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Qualification
-                      </label>
-
-                      <div className="relative">
-                        <GraduationCap
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="text"
-                          name="qualification"
-                          value={formData.qualification}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="e.g. MBBS, MD"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Experience */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Experience
-                      </label>
-
-                      <div className="relative">
-                        <BriefcaseMedical
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="number"
-                          min="0"
-                          name="experience"
-                          value={formData.experience}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-12 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="Years"
-                        />
-
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-600">
-                          years
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Consultation Fee */}
-                    <div>
-                      <label className="mb-2 block text-sm font-medium text-slate-300">
-                        Consultation Fee
-                      </label>
-
-                      <div className="relative">
-                        <IndianRupee
-                          size={18}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                        />
-
-                        <input
-                          type="number"
-                          min="0"
-                          name="consultationFee"
-                          value={formData.consultationFee}
-                          onChange={handleChange}
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 py-3 pl-10 pr-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                          placeholder="Enter fee"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* About */}
-                <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
-                      <FileText size={20} className="text-amber-400" />
-                    </div>
-
-                    <div>
-                      <h2 className="font-semibold text-white">About</h2>
-
-                      <p className="text-xs text-slate-500">
-                        Tell patients about your professional experience
-                      </p>
+                <div className="grid gap-5 sm:grid-cols-2 text-xs">
+                  {/* Name */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <UserRound
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="Enter your name"
+                      />
                     </div>
                   </div>
 
-                  <textarea
-                    name="about"
-                    value={formData.about}
-                    onChange={handleChange}
-                    rows="5"
-                    maxLength="1000"
-                    className="w-full resize-none rounded-xl border border-slate-700 bg-slate-950 p-4 text-sm leading-6 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-500"
-                    placeholder="Write something about your experience, expertise and medical practice..."
-                  />
+                  {/* Email */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Email
+                    </label>
+                    <div className="relative">
+                      <Mail
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"
+                      />
+                      <input
+                        type="email"
+                        value={doctor.email || ""}
+                        disabled
+                        className="w-full cursor-not-allowed rounded-xl border border-cyan-500/10 bg-[#07111f]/50 py-3 pl-10 pr-4 text-gray-500 outline-none"
+                      />
+                    </div>
+                    <p className="mt-1.5 text-[11px] text-gray-500">
+                      Email address cannot be modified here.
+                    </p>
+                  </div>
 
-                  <p className="mt-2 text-right text-xs text-slate-600">
-                    {formData.about.length}/1000
-                  </p>
-                </div>
+                  {/* Phone */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Phone Number
+                    </label>
+                    <div className="relative">
+                      <Phone
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                  </div>
 
-                {/* Save Button */}
-                <div className="mt-6 flex justify-end">
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {saving ? (
-                      <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                        Saving...
-                      </>
-                    ) : (
-                      <>
-                        <Save size={18} />
-                        Save Changes
-                      </>
-                    )}
-                  </button>
+                  {/* Location */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Location
+                    </label>
+                    <div className="relative">
+                      <MapPin
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="Enter location"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Right Side */}
-              <div className="space-y-6">
-                {/* Availability */}
-                <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
-                      <Power size={20} className="text-emerald-400" />
+              {/* Professional Information */}
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-purple-500/20 bg-purple-500/10 text-purple-400">
+                    <BriefcaseMedical size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white tracking-tight">
+                      Professional Information
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Medical background and consultation fees
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2 text-xs">
+                  {/* Specialization */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Specialization
+                    </label>
+                    <div className="relative">
+                      <Stethoscope
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="text"
+                        name="specialization"
+                        value={formData.specialization}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="e.g. Cardiologist"
+                      />
                     </div>
+                  </div>
 
-                    <div>
-                      <h2 className="font-semibold text-white">Availability</h2>
+                  {/* Qualification */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Qualification
+                    </label>
+                    <div className="relative">
+                      <GraduationCap
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="text"
+                        name="qualification"
+                        value={formData.qualification}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="e.g. MBBS, MD"
+                      />
+                    </div>
+                  </div>
 
-                      <p className="text-xs text-slate-500">
-                        Control your availability
+                  {/* Experience */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Experience
+                    </label>
+                    <div className="relative">
+                      <BriefcaseMedical
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        name="experience"
+                        value={formData.experience}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-14 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="Years"
+                      />
+                      <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-500">
+                        years
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Consultation Fee */}
+                  <div>
+                    <label className="mb-2 block font-medium text-gray-300">
+                      Consultation Fee
+                    </label>
+                    <div className="relative">
+                      <IndianRupee
+                        size={16}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        name="consultationFee"
+                        value={formData.consultationFee}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] py-3 pl-10 pr-4 font-semibold text-white outline-none transition focus:border-cyan-500/40"
+                        placeholder="Enter fee"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* About */}
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400">
+                    <FileText size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white tracking-tight">
+                      About
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Summary of your medical practice and expertise
+                    </p>
+                  </div>
+                </div>
+
+                <textarea
+                  name="about"
+                  value={formData.about}
+                  onChange={handleChange}
+                  rows="5"
+                  maxLength="1000"
+                  className="w-full resize-none rounded-xl border border-cyan-500/10 bg-[#07111f] p-4 text-xs leading-relaxed text-white outline-none transition focus:border-cyan-500/40"
+                  placeholder="Write something about your experience, expertise and medical practice..."
+                />
+
+                <p className="mt-2 text-right text-xs font-medium text-gray-500">
+                  {formData.about.length}/1000
+                </p>
+              </div>
+
+              {/* Save Button */}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 text-xs font-bold text-gray-950 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-cyan-500/20 cursor-pointer"
+                >
+                  {saving ? (
+                    <>
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-950/30 border-t-gray-950" />
+                      Saving changes...
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side Cards */}
+            <div className="space-y-6">
+              {/* Availability Toggle Card */}
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
+                    <Power size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white tracking-tight">
+                      Availability
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      Toggle appointment booking status
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleAvailability}
+                  className={`flex w-full items-center justify-between rounded-xl border p-4 transition cursor-pointer ${
+                    formData.available
+                      ? "border-emerald-500/30 bg-emerald-500/5"
+                      : "border-red-500/30 bg-red-500/5"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`h-3 w-3 rounded-full ${
+                        formData.available ? "bg-emerald-400" : "bg-red-400"
+                      }`}
+                    />
+                    <div className="text-left text-xs">
+                      <p
+                        className={`font-semibold ${
+                          formData.available
+                            ? "text-emerald-400"
+                            : "text-red-400"
+                        }`}
+                      >
+                        {formData.available ? "Available" : "Unavailable"}
+                      </p>
+                      <p className="mt-0.5 text-[11px] text-gray-400">
+                        {formData.available
+                          ? "Patients can book appointments"
+                          : "Booking is currently paused"}
                       </p>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleAvailability}
-                    className={`flex w-full items-center justify-between rounded-2xl border p-4 transition ${
-                      formData.available
-                        ? "border-emerald-500/20 bg-emerald-500/5"
-                        : "border-red-500/20 bg-red-500/5"
+                  <div
+                    className={`h-6 w-11 rounded-full p-1 transition ${
+                      formData.available ? "bg-emerald-500" : "bg-gray-800"
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`h-3 w-3 rounded-full ${
-                          formData.available ? "bg-emerald-400" : "bg-red-400"
-                        }`}
-                      />
-
-                      <div className="text-left">
-                        <p
-                          className={`text-sm font-medium ${
-                            formData.available
-                              ? "text-emerald-400"
-                              : "text-red-400"
-                          }`}
-                        >
-                          {formData.available ? "Available" : "Unavailable"}
-                        </p>
-
-                        <p className="mt-1 text-xs text-slate-500">
-                          {formData.available
-                            ? "Patients can book appointments"
-                            : "Patients cannot book appointments"}
-                        </p>
-                      </div>
-                    </div>
-
                     <div
-                      className={`h-6 w-11 rounded-full p-1 transition ${
-                        formData.available ? "bg-emerald-500" : "bg-slate-700"
+                      className={`h-4 w-4 rounded-full bg-[#07111f] transition ${
+                        formData.available ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </div>
+                </button>
+              </div>
+
+              {/* Account Information */}
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400">
+                    <CheckCircle2 size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white tracking-tight">
+                      Account Information
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      MediCare portal status
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3.5 text-xs">
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-cyan-500/10 bg-[#07111f] p-3.5">
+                    <span className="font-medium text-gray-400">Role</span>
+                    <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-0.5 font-semibold capitalize text-cyan-400">
+                      {doctor.role}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-cyan-500/10 bg-[#07111f] p-3.5">
+                    <span className="font-medium text-gray-400">
+                      Account Status
+                    </span>
+                    <span
+                      className={`flex items-center gap-1.5 font-semibold ${
+                        doctor.isActive ? "text-emerald-400" : "text-red-400"
                       }`}
                     >
-                      <div
-                        className={`h-4 w-4 rounded-full bg-white transition ${
-                          formData.available ? "translate-x-5" : "translate-x-0"
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          doctor.isActive ? "bg-emerald-400" : "bg-red-400"
                         }`}
                       />
-                    </div>
-                  </button>
-                </div>
-
-                {/* Account Information */}
-                <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
-                      <CheckCircle2 size={20} className="text-blue-400" />
-                    </div>
-
-                    <div>
-                      <h2 className="font-semibold text-white">
-                        Account Information
-                      </h2>
-
-                      <p className="text-xs text-slate-500">
-                        Your MediCare account
-                      </p>
-                    </div>
+                      {doctor.isActive ? "Active" : "Inactive"}
+                    </span>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-sm text-slate-500">Role</span>
-
-                      <span className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium capitalize text-blue-400">
-                        {doctor.role}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-sm text-slate-500">Account</span>
-
-                      <span className="flex items-center gap-2 text-xs font-medium text-emerald-400">
-                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                        Active
-                      </span>
-                    </div>
-
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="text-sm text-slate-500">Email</span>
-
-                      <span className="max-w-[180px] break-all text-right text-xs text-slate-400">
-                        {doctor.email}
-                      </span>
-                    </div>
+                  <div className="flex items-start justify-between gap-3 rounded-xl border border-cyan-500/10 bg-[#07111f] p-3.5">
+                    <span className="font-medium text-gray-400">
+                      Email Address
+                    </span>
+                    <span className="max-w-[170px] truncate font-semibold text-gray-300">
+                      {doctor.email}
+                    </span>
                   </div>
                 </div>
+              </div>
 
-                {/* Security Note */}
-                <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-                  <div className="flex items-start gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
-                      <CheckCircle2 size={18} className="text-amber-400" />
-                    </div>
-
-                    <div>
-                      <h3 className="text-sm font-semibold text-white">
-                        Profile Security
-                      </h3>
-
-                      <p className="mt-2 text-xs leading-5 text-slate-500">
-                        Your email and password cannot be changed from this
-                        page. Password management will be handled separately.
-                      </p>
-                    </div>
+              {/* Security Note */}
+              <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 p-6 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400">
+                    <CheckCircle2 size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white tracking-tight">
+                      Profile Security
+                    </h4>
+                    <p className="mt-1 text-xs leading-relaxed text-gray-400">
+                      Credentials and password updates are managed through
+                      secured authentication settings.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-
-          {/* Footer */}
-          <div className="py-8 text-center">
-            <p className="text-xs text-slate-600">MediCare Doctor Portal</p>
           </div>
+        </form>
+
+        {/* Footer */}
+        <div className="py-8 text-center">
+          <p className="text-xs font-medium text-gray-500">
+            MediCare Doctor Portal &copy; 2026
+          </p>
         </div>
       </main>
     </div>

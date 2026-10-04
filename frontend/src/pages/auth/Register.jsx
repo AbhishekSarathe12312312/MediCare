@@ -31,7 +31,7 @@ const Register = () => {
       setLoading(true);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/register`,
+        `${import.meta.env.VITE_API_URL}/api/patient/register`,
         formData,
       );
 

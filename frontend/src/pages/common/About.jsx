@@ -149,7 +149,7 @@ const About = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/doctors")}
+            onClick={() => navigate("/patient/find-doctors")}
             className="mt-7 bg-white text-blue-700 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition"
           >
             Find Doctors

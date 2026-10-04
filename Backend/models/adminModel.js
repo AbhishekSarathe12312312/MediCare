@@ -27,7 +27,12 @@ const adminSchema = new mongoose.Schema(
       enum: ["admin"],
       default: "admin",
     },
+    profileImage: {
+      type: String,
+      default: "",
+    },
   },
+
   {
     timestamps: true,
   },

@@ -1,19 +1,16 @@
 import express from "express";
 import {
-  adminDeleteDoctor,
-  adminGetDoctors,
-  adminUpdateDoctor,
-  createDoctor,
+  getDoctorPatients,
   getDoctorProfile,
   getDoctors,
-  loginDoctor,
-  toggleDoctorStatus,
+  registerDoctor,
   updateDoctorProfile,
 } from "../controllers/doctorController.js";
 import authMiddleware, {
   authorizeRole,
 } from "../middlewares/authMiddleware.js";
 import { singleUpload } from "../middlewares/multer.js";
+import { commonLogin } from "../controllers/patientController.js";
 
 const router = express.Router();
 
@@ -21,21 +18,23 @@ const router = express.Router();
 // public - get Doctor
 // =========================
 router.get("/get-doctors", getDoctors);
+
 // =========================
-// Admin - Create Doctor
+// Register Doctor
 // =========================
-router.post(
-  "/create-doctor",
-  authMiddleware,
-  authorizeRole("admin"),
-  singleUpload,
-  createDoctor,
-);
+router.post("/register", singleUpload, registerDoctor);
 
 // =========================
 // Doctor Login
 // =========================
-router.post("/login", loginDoctor);
+router.post(
+  "/login",
+  (req, res, next) => {
+    req.role = "doctor";
+    next();
+  },
+  commonLogin,
+);
 // =========================
 // Doctor Profile
 // =========================
@@ -56,41 +55,13 @@ router.put(
   updateDoctorProfile,
 );
 // =========================
-// Admin - Get Doctors
+// Doctor's Patients
 // =========================
 router.get(
-  "/admin/doctors",
+  "/patients",
   authMiddleware,
-  authorizeRole("admin"),
-  adminGetDoctors,
-);
-// =========================
-// Admin - Update Doctor
-// =========================
-router.put(
-  "/admin/doctors/:doctorId",
-  authMiddleware,
-  authorizeRole("admin"),
-  singleUpload,
-  adminUpdateDoctor,
-);
-// =========================
-// Admin - Activate / Deactivate
-// =========================
-router.patch(
-  "/admin/doctors/:doctorId/status",
-  authMiddleware,
-  authorizeRole("admin"),
-  toggleDoctorStatus,
-);
-// =========================
-// Admin - Delete Doctor
-// =========================
-router.delete(
-  "/admin/doctors/:doctorId",
-  authMiddleware,
-  authorizeRole("admin"),
-  adminDeleteDoctor,
+  authorizeRole("doctor"),
+  getDoctorPatients,
 );
 
 export default router;

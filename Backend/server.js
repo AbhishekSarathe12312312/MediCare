@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import userRoute from "./routes/userRoute.js";
+import patientRoute from "./routes/patientRoute.js";
 import doctorRoute from "./routes/doctorRoute.js";
 import appointmentRoute from "./routes/appointmentRoute.js";
 import adminRoute from "./routes/adminRoute.js";
@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://medi-care-lemon-eta.vercel.app",
+    origin: ["https://medi-care-lemon-eta.vercel.app", "http://localhost:5173"],
     credentials: true,
   }),
 );
@@ -29,10 +29,10 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/user", userRoute);
+app.use("/api/patient", patientRoute);
 app.use("/api/doctor", doctorRoute);
-app.use("/api/appointment", appointmentRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/appointment", appointmentRoute);
 app.use("/api/payment", paymentRoute);
 
 const PORT = process.env.PORT || 8000;

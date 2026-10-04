@@ -19,7 +19,7 @@ import {
   EyeOff,
 } from "lucide-react";
 
-const CreateDoctor = () => {
+const DoctorRegister = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -68,35 +68,19 @@ const CreateDoctor = () => {
     try {
       setLoading(true);
 
-      // Get admin token
-      const adminToken = localStorage.getItem("adminToken");
-
-      if (!adminToken) {
-        toast.error("Admin authentication required");
-        navigate("/admin/login");
-        return;
-      }
-
-      // Create FormData
       const data = new FormData();
 
       Object.entries(formData).forEach(([key, value]) => {
         data.append(key, value);
       });
 
-      // Add profile image
       if (profileImage) {
         data.append("file", profileImage);
       }
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/doctor/create-doctor`,
+        `${import.meta.env.VITE_API_URL}/api/doctor/register`,
         data,
-        {
-          headers: {
-            Authorization: `Bearer ${adminToken}`,
-          },
-        },
       );
 
       if (response.data.success) {
@@ -118,26 +102,11 @@ const CreateDoctor = () => {
         setProfileImage(null);
 
         setTimeout(() => {
-          navigate("/doctor/login");
+          navigate("/login");
         }, 800);
       }
     } catch (error) {
-      console.error("CREATE DOCTOR ERROR:", error);
-
-      if (error.response?.status === 401) {
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("admin");
-
-        toast.error("Admin session expired. Please login again.");
-
-        navigate("/admin/login");
-        return;
-      }
-
-      if (error.response?.status === 403) {
-        toast.error("Access denied. Admin only.");
-        return;
-      }
+      console.error("DOCTOR REGISTRATION ERROR:", error);
 
       toast.error(
         error.response?.data?.message || "Unable to create doctor account",
@@ -163,11 +132,13 @@ const CreateDoctor = () => {
             <div className="flex items-center gap-2">
               <Stethoscope size={24} className="text-blue-500" />
 
-              <h1 className="text-2xl font-bold text-white">Create Doctor</h1>
+              <h1 className="text-2xl font-bold text-white">
+                Doctor Registration
+              </h1>
             </div>
 
             <p className="mt-1 text-sm text-slate-400">
-              Create a doctor account for MediCare
+              Create your doctor account for MediCare
             </p>
           </div>
         </div>
@@ -460,7 +431,7 @@ const CreateDoctor = () => {
                 disabled={loading}
                 className="rounded-xl bg-blue-600 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? "Creating Doctor..." : "Create Doctor Account"}
+                {loading ? "Creating Account..." : "Create Doctor Account"}
               </button>
             </div>
           </form>
@@ -470,4 +441,4 @@ const CreateDoctor = () => {
   );
 };
 
-export default CreateDoctor;
+export default DoctorRegister;

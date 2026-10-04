@@ -76,7 +76,7 @@ const Home = () => {
 
             <div className="mt-10 flex flex-wrap gap-4">
               <button
-                onClick={() => navigate("/patient/doctors")}
+                onClick={() => navigate("/patient/find-doctors")}
                 className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-medium transition hover:bg-blue-700"
               >
                 Find Doctors
@@ -205,7 +205,7 @@ const Home = () => {
           </p>
 
           <button
-            onClick={() => navigate("/patient/doctors")}
+            onClick={() => navigate("/patient/find-doctors")}
             className="mt-8 rounded-xl bg-white px-6 py-3 font-semibold text-blue-700 transition hover:bg-blue-50"
           >
             Find Doctors

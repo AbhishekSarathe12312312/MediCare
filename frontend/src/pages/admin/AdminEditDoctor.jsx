@@ -17,7 +17,7 @@ import {
   Camera,
 } from "lucide-react";
 
-const EditDoctor = () => {
+const AdminEditDoctor = () => {
   const navigate = useNavigate();
   const { doctorId } = useParams();
 
@@ -52,7 +52,7 @@ const EditDoctor = () => {
       setLoading(true);
 
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors`,
+        `${import.meta.env.VITE_API_URL}/api/admin/doctors`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,8 +91,8 @@ const EditDoctor = () => {
       console.error("FETCH DOCTOR ERROR:", error);
 
       if (error.response?.status === 401) {
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("admin");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
 
         toast.error("Session expired. Please login again.");
 
@@ -117,8 +117,8 @@ const EditDoctor = () => {
   // =========================
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    const storedAdmin = localStorage.getItem("admin");
+    const token = sessionStorage.getItem("token");
+    const storedAdmin = sessionStorage.getItem("admin");
 
     if (!token) {
       navigate("/admin/login");
@@ -203,7 +203,7 @@ const EditDoctor = () => {
       return;
     }
 
-    const token = localStorage.getItem("adminToken");
+    const token = sessionStorage.getItem("token");
 
     if (!token) {
       navigate("/admin/login");
@@ -236,7 +236,7 @@ const EditDoctor = () => {
       }
 
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/doctor/admin/doctors/${doctorId}`,
+        `${import.meta.env.VITE_API_URL}/api/admin/doctors/${doctorId}`,
         data,
         {
           headers: {
@@ -254,8 +254,8 @@ const EditDoctor = () => {
       console.error("UPDATE DOCTOR ERROR:", error);
 
       if (error.response?.status === 401) {
-        localStorage.removeItem("adminToken");
-        localStorage.removeItem("admin");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
 
         toast.error("Session expired. Please login again.");
 
@@ -279,8 +279,8 @@ const EditDoctor = () => {
   // =========================
 
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("admin");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
 
     toast.success("Logged out successfully");
 
@@ -304,9 +304,9 @@ const EditDoctor = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#07111f] text-white">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-2 border-gray-700 border-t-blue-400" />
+          <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-2 border-gray-700 border-t-cyan-400" />
 
-          <p className="text-sm text-gray-500">Loading doctor...</p>
+          <p className="text-sm text-gray-400">Loading doctor...</p>
         </div>
       </div>
     );
@@ -318,7 +318,7 @@ const EditDoctor = () => {
 
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -330,8 +330,8 @@ const EditDoctor = () => {
       <aside
         className={`
           fixed left-0 top-0 z-50 h-screen w-72
-          border-r border-gray-800
-          bg-[#0b1728]
+          border-r border-cyan-500/10
+          bg-[#0b1728]/90 backdrop-blur-xl
           transition-transform duration-300
           lg:translate-x-0
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
@@ -339,19 +339,19 @@ const EditDoctor = () => {
       >
         {/* Logo */}
 
-        <div className="flex h-20 items-center justify-between border-b border-gray-800 px-6">
+        <div className="flex h-20 items-center justify-between border-b border-cyan-500/10 px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10">
-              <Stethoscope size={23} className="text-blue-400" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/10 shadow-lg shadow-cyan-500/5">
+              <Stethoscope size={23} className="text-cyan-400" />
             </div>
 
             <div>
-              <h1 className="text-xl font-bold">
+              <h1 className="text-xl font-bold tracking-wide">
                 Medi
-                <span className="text-blue-400">Care</span>
+                <span className="text-cyan-400">Care</span>
               </h1>
 
-              <p className="text-[11px] text-gray-500">Admin Panel</p>
+              <p className="text-[11px] text-gray-400">Admin Panel</p>
             </div>
           </div>
 
@@ -366,14 +366,14 @@ const EditDoctor = () => {
         {/* Navigation */}
 
         <div className="px-4 py-6">
-          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
             Main Menu
           </p>
 
           <nav className="space-y-1">
             <button
               onClick={() => handleNavigation("/admin/dashboard")}
-              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-cyan-500/5 hover:text-cyan-300"
             >
               <LayoutDashboard size={19} />
               Dashboard
@@ -381,7 +381,7 @@ const EditDoctor = () => {
 
             <button
               onClick={() => handleNavigation("/admin/doctors")}
-              className="flex w-full items-center gap-3 rounded-xl bg-blue-500/10 px-4 py-3 text-sm font-medium text-blue-400"
+              className="flex w-full items-center gap-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 px-4 py-3 text-sm font-medium text-cyan-400 shadow-sm shadow-cyan-500/5"
             >
               <Stethoscope size={19} />
               Doctors
@@ -389,7 +389,7 @@ const EditDoctor = () => {
 
             <button
               onClick={() => handleNavigation("/admin/patients")}
-              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-cyan-500/5 hover:text-cyan-300"
             >
               <Users size={19} />
               Patients
@@ -397,7 +397,7 @@ const EditDoctor = () => {
 
             <button
               onClick={() => handleNavigation("/admin/appointments")}
-              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-white/5 hover:text-white"
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition hover:bg-cyan-500/5 hover:text-cyan-300"
             >
               <CalendarDays size={19} />
               Appointments
@@ -407,18 +407,18 @@ const EditDoctor = () => {
 
         {/* Admin */}
 
-        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-800 p-4">
-          <div className="mb-3 flex items-center gap-3 rounded-xl bg-[#07111f] p-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10">
-              <ShieldCheck size={20} className="text-blue-400" />
+        <div className="absolute bottom-0 left-0 right-0 border-t border-cyan-500/10 p-4 bg-[#0b1728]">
+          <div className="mb-3 flex items-center gap-3 rounded-xl bg-[#07111f] border border-cyan-500/10 p-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 border border-cyan-500/20">
+              <ShieldCheck size={20} className="text-cyan-400" />
             </div>
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">
+              <p className="truncate text-sm font-medium text-white">
                 {admin?.name || "Admin"}
               </p>
 
-              <p className="truncate text-xs text-gray-500">
+              <p className="truncate text-xs text-gray-400">
                 {admin?.email || "admin@medicare.com"}
               </p>
             </div>
@@ -426,7 +426,7 @@ const EditDoctor = () => {
 
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10"
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-400 transition hover:bg-red-500/10 border border-transparent hover:border-red-500/20"
           >
             <LogOut size={19} />
             Logout
@@ -441,7 +441,7 @@ const EditDoctor = () => {
       <main className="lg:ml-72">
         {/* Header */}
 
-        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-gray-800 bg-[#07111f]/95 px-5 backdrop-blur-md sm:px-8">
+        <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-cyan-500/10 bg-[#07111f]/90 px-5 backdrop-blur-xl sm:px-8">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -451,9 +451,11 @@ const EditDoctor = () => {
             </button>
 
             <div>
-              <h2 className="text-xl font-semibold sm:text-2xl">Edit Doctor</h2>
+              <h2 className="text-xl font-semibold sm:text-2xl tracking-tight">
+                Edit Doctor
+              </h2>
 
-              <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+              <p className="mt-1 text-xs text-gray-400 sm:text-sm">
                 Update doctor information
               </p>
             </div>
@@ -461,7 +463,7 @@ const EditDoctor = () => {
 
           <button
             onClick={() => navigate("/admin/doctors")}
-            className="flex items-center gap-2 rounded-xl border border-gray-700 px-4 py-2.5 text-sm text-gray-300 transition hover:bg-white/5 hover:text-white"
+            className="flex items-center gap-2 rounded-xl border border-cyan-500/20 px-4 py-2.5 text-sm text-gray-300 transition hover:bg-cyan-500/5 hover:text-cyan-300"
           >
             <ArrowLeft size={17} />
             <span className="hidden sm:inline">Back</span>
@@ -474,11 +476,11 @@ const EditDoctor = () => {
           <form onSubmit={handleSubmit} className="mx-auto max-w-4xl">
             {/* Doctor Information */}
 
-            <div className="rounded-2xl border border-gray-800 bg-[#0b1728] p-5 sm:p-7">
+            <div className="rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 backdrop-blur-md p-5 sm:p-7 shadow-lg shadow-cyan-500/5">
               <div className="mb-7">
                 <h3 className="text-lg font-semibold">Doctor Information</h3>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-400">
                   Update the doctor's professional information.
                 </p>
               </div>
@@ -487,7 +489,7 @@ const EditDoctor = () => {
 
               <div className="mb-7 flex items-center gap-5">
                 <div className="relative">
-                  <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-gray-700 bg-[#07111f]">
+                  <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-cyan-500/20 bg-[#07111f]">
                     {imagePreview ? (
                       <img
                         src={imagePreview}
@@ -496,14 +498,14 @@ const EditDoctor = () => {
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center">
-                        <Stethoscope size={35} className="text-gray-500" />
+                        <Stethoscope size={35} className="text-cyan-400/60" />
                       </div>
                     )}
                   </div>
 
                   <label
                     htmlFor="doctor-profile-image"
-                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-[#0b1728] bg-blue-600 transition hover:bg-blue-500"
+                    className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-[#0b1728] bg-cyan-500 text-gray-950 font-bold transition hover:bg-cyan-400 shadow-md"
                   >
                     <Camera size={15} />
                   </label>
@@ -522,11 +524,11 @@ const EditDoctor = () => {
                     Profile Image
                   </p>
 
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-gray-400">
                     Click the camera icon to change the image.
                   </p>
 
-                  <p className="mt-1 text-xs text-gray-600">
+                  <p className="mt-1 text-xs text-gray-500">
                     JPG, PNG or WEBP • Maximum 5MB
                   </p>
                 </div>
@@ -536,7 +538,7 @@ const EditDoctor = () => {
                 {/* Name */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Doctor Name
                   </label>
 
@@ -546,14 +548,14 @@ const EditDoctor = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Doctor name"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Phone */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Phone Number
                   </label>
 
@@ -563,14 +565,14 @@ const EditDoctor = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Phone number"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Email */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Email Address
                   </label>
 
@@ -586,7 +588,7 @@ const EditDoctor = () => {
                 {/* Specialization */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Specialization
                   </label>
 
@@ -596,14 +598,14 @@ const EditDoctor = () => {
                     value={formData.specialization}
                     onChange={handleChange}
                     placeholder="e.g. Cardiologist"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Qualification */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Qualification
                   </label>
 
@@ -613,14 +615,14 @@ const EditDoctor = () => {
                     value={formData.qualification}
                     onChange={handleChange}
                     placeholder="e.g. MBBS, MD"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Experience */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Experience (Years)
                   </label>
 
@@ -631,14 +633,14 @@ const EditDoctor = () => {
                     value={formData.experience}
                     onChange={handleChange}
                     placeholder="e.g. 8"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Fee */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Consultation Fee
                   </label>
 
@@ -649,14 +651,14 @@ const EditDoctor = () => {
                     value={formData.consultationFee}
                     onChange={handleChange}
                     placeholder="e.g. 500"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
 
                 {/* Location */}
 
                 <div>
-                  <label className="mb-2 block text-sm text-gray-300">
+                  <label className="mb-2 block text-sm text-gray-300 font-medium">
                     Location
                   </label>
 
@@ -666,7 +668,7 @@ const EditDoctor = () => {
                     value={formData.location}
                     onChange={handleChange}
                     placeholder="e.g. Bhopal"
-                    className="w-full rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                    className="w-full rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                   />
                 </div>
               </div>
@@ -674,7 +676,7 @@ const EditDoctor = () => {
               {/* About */}
 
               <div className="mt-5">
-                <label className="mb-2 block text-sm text-gray-300">
+                <label className="mb-2 block text-sm text-gray-300 font-medium">
                   About Doctor
                 </label>
 
@@ -684,18 +686,18 @@ const EditDoctor = () => {
                   value={formData.about}
                   onChange={handleChange}
                   placeholder="Write something about the doctor..."
-                  className="w-full resize-none rounded-xl border border-gray-700 bg-[#07111f] px-4 py-3 text-sm text-white outline-none transition focus:border-blue-500"
+                  className="w-full resize-none rounded-xl border border-cyan-500/10 bg-[#07111f] px-4 py-3 text-sm text-white placeholder-gray-600 outline-none transition focus:border-cyan-500/40 focus:ring-1 focus:ring-cyan-500/20"
                 />
               </div>
             </div>
 
             {/* Status Settings */}
 
-            <div className="mt-5 rounded-2xl border border-gray-800 bg-[#0b1728] p-5 sm:p-7">
+            <div className="mt-5 rounded-2xl border border-cyan-500/10 bg-[#0b1728]/80 backdrop-blur-md p-5 sm:p-7 shadow-lg shadow-cyan-500/5">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold">Status Settings</h3>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-400">
                   Control the doctor's account and appointment availability.
                 </p>
               </div>
@@ -703,11 +705,11 @@ const EditDoctor = () => {
               <div className="space-y-4">
                 {/* Account Status */}
 
-                <div className="flex items-center justify-between gap-4 rounded-xl bg-[#07111f] p-4">
+                <div className="flex items-center justify-between gap-4 rounded-xl bg-[#07111f] border border-cyan-500/10 p-4">
                   <div>
                     <p className="text-sm font-medium">Account Status</p>
 
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-400">
                       {formData.isActive
                         ? "Doctor can login to the system."
                         : "Doctor cannot login to the system."}
@@ -719,12 +721,12 @@ const EditDoctor = () => {
                     onClick={() => handleToggle("isActive")}
                     className={`
                       relative h-7 w-12 rounded-full transition
-                      ${formData.isActive ? "bg-green-500" : "bg-gray-700"}
+                      ${formData.isActive ? "bg-emerald-500" : "bg-gray-700"}
                     `}
                   >
                     <span
                       className={`
-                        absolute top-1 h-5 w-5 rounded-full bg-white transition
+                        absolute top-1 h-5 w-5 rounded-full bg-white transition shadow-sm
                         ${formData.isActive ? "left-6" : "left-1"}
                       `}
                     />
@@ -733,13 +735,13 @@ const EditDoctor = () => {
 
                 {/* Availability */}
 
-                <div className="flex items-center justify-between gap-4 rounded-xl bg-[#07111f] p-4">
+                <div className="flex items-center justify-between gap-4 rounded-xl bg-[#07111f] border border-cyan-500/10 p-4">
                   <div>
                     <p className="text-sm font-medium">
                       Appointment Availability
                     </p>
 
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-gray-400">
                       {formData.available
                         ? "Patients can book appointments."
                         : "Patients cannot book appointments."}
@@ -751,12 +753,12 @@ const EditDoctor = () => {
                     onClick={() => handleToggle("available")}
                     className={`
                       relative h-7 w-12 rounded-full transition
-                      ${formData.available ? "bg-blue-500" : "bg-gray-700"}
+                      ${formData.available ? "bg-cyan-500" : "bg-gray-700"}
                     `}
                   >
                     <span
                       className={`
-                        absolute top-1 h-5 w-5 rounded-full bg-white transition
+                        absolute top-1 h-5 w-5 rounded-full bg-white transition shadow-sm
                         ${formData.available ? "left-6" : "left-1"}
                       `}
                     />
@@ -771,7 +773,7 @@ const EditDoctor = () => {
               <button
                 type="button"
                 onClick={() => navigate("/admin/doctors")}
-                className="rounded-xl border border-gray-700 px-6 py-3 text-sm font-medium text-gray-300 transition hover:bg-white/5 hover:text-white"
+                className="rounded-xl border border-cyan-500/20 px-6 py-3 text-sm font-medium text-gray-300 transition hover:bg-cyan-500/5 hover:text-cyan-300"
               >
                 Cancel
               </button>
@@ -779,7 +781,7 @@ const EditDoctor = () => {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 px-6 py-3 text-sm font-semibold text-gray-950 shadow-lg shadow-cyan-500/20 transition hover:from-cyan-400 hover:to-teal-400 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving ? (
                   "Saving..."
@@ -798,4 +800,4 @@ const EditDoctor = () => {
   );
 };
 
-export default EditDoctor;
+export default AdminEditDoctor;

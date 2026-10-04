@@ -18,7 +18,7 @@ const Appointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/appointment/my-appointments`,
@@ -36,8 +36,8 @@ const Appointments = () => {
       console.error("GET APPOINTMENTS ERROR:", error);
 
       if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         navigate("/login");
         return;
       }
@@ -100,7 +100,7 @@ const Appointments = () => {
     }
 
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
 
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/appointment/cancel-appointment/${appointmentId}`,
@@ -128,42 +128,54 @@ const Appointments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 px-4 py-6 text-white md:px-8">
+    <div className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 md:px-8 lg:px-12 pt-16 selection:bg-cyan-500 selection:text-slate-950">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <button
             onClick={() => navigate("/patient/dashboard")}
-            className="mb-5 flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
+            className="group mb-4 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-4 py-1.5 text-xs font-medium text-slate-300 backdrop-blur-md transition hover:border-cyan-500/40 hover:text-white cursor-pointer"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
             Back to Dashboard
           </button>
 
-          <p className="mb-2 text-sm font-medium text-cyan-400">MediCare</p>
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/80 px-3 py-1 text-xs font-medium text-cyan-400 backdrop-blur-md shadow-sm ml-2 sm:ml-0">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            MediCare Consultations
+          </div>
 
-          <h1 className="text-3xl font-bold md:text-4xl">My Appointments</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl">
+            My Appointments
+          </h1>
 
-          <p className="mt-2 text-slate-400">
-            View and manage your upcoming and previous appointments.
+          <p className="mt-1 text-sm text-slate-400">
+            View and manage your upcoming and previous scheduled consultations.
           </p>
         </div>
 
         {/* Empty State */}
         {appointments.length === 0 ? (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-16 text-center">
-            <CalendarDays size={48} className="mx-auto mb-5 text-slate-600" />
+          <div className="rounded-3xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl px-6 py-16 text-center shadow-xl shadow-slate-950/30">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-800 bg-slate-950 text-slate-500">
+              <CalendarDays size={32} />
+            </div>
 
-            <h2 className="text-xl font-semibold">No appointments yet</h2>
+            <h2 className="text-lg font-bold text-white">
+              No appointments yet
+            </h2>
 
-            <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+            <p className="mx-auto mt-1 max-w-md text-xs text-slate-400">
               You haven't booked any appointments yet. Find a doctor and
-              schedule your first appointment.
+              schedule your first consultation.
             </p>
 
             <button
-              onClick={() => navigate("/patient/doctors")}
-              className="mt-6 rounded-xl bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+              onClick={() => navigate("/patient/find-doctors")}
+              className="mt-6 rounded-xl bg-cyan-500 px-6 py-3 text-xs font-semibold text-slate-950 shadow-lg shadow-cyan-500/25 transition-all hover:bg-cyan-400 hover:shadow-cyan-400/40 active:scale-95 cursor-pointer"
             >
               Find a Doctor
             </button>
@@ -173,12 +185,12 @@ const Appointments = () => {
             {appointments.map((appointment) => (
               <div
                 key={appointment._id}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-5 md:p-6"
+                className="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/40 hover:shadow-xl hover:shadow-slate-950/40"
               >
                 <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                   {/* Doctor */}
                   <div className="flex items-start gap-4">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-cyan-500/10 text-cyan-400">
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 shadow-inner">
                       {appointment.doctor?.profileImage ? (
                         <img
                           src={appointment.doctor.profileImage}
@@ -186,20 +198,20 @@ const Appointments = () => {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <Stethoscope size={28} />
+                        <Stethoscope size={26} />
                       )}
                     </div>
 
                     <div>
-                      <h2 className="text-lg font-semibold">
+                      <h2 className="text-lg font-bold text-white">
                         {appointment.doctor?.name || "Doctor"}
                       </h2>
 
-                      <p className="mt-1 text-sm text-cyan-400">
+                      <p className="mt-0.5 text-xs font-semibold text-cyan-400">
                         {appointment.doctor?.specialization}
                       </p>
 
-                      <p className="mt-1 text-sm text-slate-500">
+                      <p className="mt-1 text-xs text-slate-400">
                         {appointment.doctor?.qualification}
                       </p>
                     </div>
@@ -207,7 +219,7 @@ const Appointments = () => {
 
                   {/* Status */}
                   <span
-                    className={`w-fit rounded-full border px-3 py-1.5 text-xs font-medium capitalize ${getStatusStyle(
+                    className={`w-fit rounded-full border px-3.5 py-1 text-xs font-semibold uppercase tracking-wide ${getStatusStyle(
                       appointment.status,
                     )}`}
                   >
@@ -216,41 +228,42 @@ const Appointments = () => {
                 </div>
 
                 {/* Details */}
-                <div className="mt-6 grid gap-4 border-t border-slate-800 pt-5 sm:grid-cols-2 lg:grid-cols-4">
-                  <div>
-                    <p className="text-xs text-slate-500">Date</p>
+                <div className="mt-6 grid gap-4 border-t border-slate-800/80 pt-5 sm:grid-cols-2 lg:grid-cols-4 text-xs">
+                  <div className="rounded-2xl border border-slate-800/60 bg-slate-950/40 p-3.5">
+                    <p className="text-slate-400 font-medium">Date</p>
 
-                    <div className="mt-2 flex items-center gap-2 text-sm">
-                      <CalendarDays size={17} className="text-cyan-400" />
-
+                    <div className="mt-2 flex items-center gap-2 text-white font-semibold">
+                      <CalendarDays size={15} className="text-cyan-400" />
                       <span>{formatDate(appointment.appointmentDate)}</span>
                     </div>
                   </div>
 
-                  <div>
-                    <p className="text-xs text-slate-500">Time</p>
+                  <div className="rounded-2xl border border-slate-800/60 bg-slate-950/40 p-3.5">
+                    <p className="text-slate-400 font-medium">Time</p>
 
-                    <div className="mt-2 flex items-center gap-2 text-sm">
-                      <Clock size={17} className="text-cyan-400" />
-
+                    <div className="mt-2 flex items-center gap-2 text-white font-semibold">
+                      <Clock size={15} className="text-cyan-400" />
                       <span>{appointment.appointmentTime}</span>
                     </div>
                   </div>
 
-                  <div>
-                    <p className="text-xs text-slate-500">Location</p>
+                  <div className="rounded-2xl border border-slate-800/60 bg-slate-950/40 p-3.5">
+                    <p className="text-slate-400 font-medium">Location</p>
 
-                    <div className="mt-2 flex items-center gap-2 text-sm">
-                      <MapPin size={17} className="text-cyan-400" />
-
-                      <span>{appointment.doctor?.location || "Bhopal"}</span>
+                    <div className="mt-2 flex items-center gap-2 text-white font-semibold truncate">
+                      <MapPin size={15} className="text-cyan-400 shrink-0" />
+                      <span className="truncate">
+                        {appointment.doctor?.location || "Bhopal"}
+                      </span>
                     </div>
                   </div>
 
-                  <div>
-                    <p className="text-xs text-slate-500">Consultation Fee</p>
+                  <div className="rounded-2xl border border-slate-800/60 bg-slate-950/40 p-3.5">
+                    <p className="text-slate-400 font-medium">
+                      Consultation Fee
+                    </p>
 
-                    <p className="mt-2 text-sm font-semibold">
+                    <p className="mt-2 text-sm font-bold text-white">
                       ₹{appointment.consultationFee}
                     </p>
                   </div>
@@ -258,19 +271,22 @@ const Appointments = () => {
 
                 {/* Reason */}
                 {appointment.reason && (
-                  <div className="mt-5 rounded-xl border border-slate-800 bg-slate-950 p-4">
-                    <p className="text-xs text-slate-500">Reason for Visit</p>
+                  <div className="mt-4 rounded-2xl border border-slate-800/80 bg-slate-950/60 p-4">
+                    <p className="text-xs font-medium text-slate-400">
+                      Reason for Visit
+                    </p>
 
-                    <p className="mt-1 text-sm text-slate-300">
+                    <p className="mt-1 text-xs leading-relaxed text-slate-300">
                       {appointment.reason}
                     </p>
                   </div>
                 )}
+
                 {["pending", "confirmed"].includes(appointment.status) && (
                   <div className="mt-5 flex justify-end">
                     <button
                       onClick={() => handleCancelAppointment(appointment._id)}
-                      className="rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-2.5 text-sm font-medium text-red-400 transition hover:bg-red-500/20"
+                      className="rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-2.5 text-xs font-semibold text-red-400 transition hover:bg-red-500/20 active:scale-95 cursor-pointer"
                     >
                       Cancel Appointment
                     </button>

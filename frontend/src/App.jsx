@@ -1,43 +1,60 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "./pages/auth/Register";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+import Register from "./pages/auth/PatientRegister";
 import VerifyOTP from "./pages/auth/VerifyOTP";
 import Login from "./pages/auth/Login";
+
 import PatientDashboard from "./pages/patient/PatientDashboard";
 import PatientProfile from "./pages/patient/PatientProfile";
 import FindDoctors from "./pages/patient/FindDoctors";
 import BookAppointment from "./pages/patient/BookAppointment";
 import Appointments from "./pages/patient/Appointments";
+
 import DoctorRegister from "./pages/doctor/DoctorRegister";
 import DoctorDashboard from "./pages/doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/doctor/DoctorAppointments";
 import DoctorProfile from "./pages/doctor/DoctorProfile";
+import DoctorPatients from "./pages/doctor/DoctorPatients";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManagePatients from "./pages/admin/ManagePatients";
 import ManageAppointments from "./pages/admin/ManageAppointments";
-import Home from "./pages/common/Home";
-import Navbar from "./components/Navbar";
-import About from "./pages/common/About";
-import Contact from "./pages/common/Contact";
-import Services from "./pages/common/Services";
-import ProtectedRoute from "./components/ProtectedRoute";
-import DoctorPatients from "./pages/doctor/DoctorPatients";
 import AdminDoctors from "./pages/admin/AdminDoctors";
 import AdminEditDoctor from "./pages/admin/AdminEditDoctor";
 import AdminProfile from "./pages/admin/AdminProfile";
 
-const App = () => {
+import Home from "./pages/common/Home";
+import About from "./pages/common/About";
+import Contact from "./pages/common/Contact";
+import Services from "./pages/common/Services";
+
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PatientRegister from "./pages/auth/PatientRegister";
+
+const AppContent = () => {
+  const location = useLocation();
+
+  const hideNavbar = [
+    "/login",
+    "/verify-otp",
+    "/patient/register",
+    "/doctor/register",
+  ].includes(location.pathname);
+
   return (
-    <BrowserRouter>
-      {/* components  */}
-      <Navbar />
+    <>
+      {!hideNavbar && <Navbar />}
 
       <Routes>
-        {/* patient */}
-        <Route path="/patient/register" element={<Register />} />
+        {/* ================= PATIENT AUTH ================= */}
+
+        <Route path="/patient/register" element={<PatientRegister />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/login" element={<Login />} />
 
-        {/* protected routes */}
+        {/* ================= PATIENT ================= */}
+
         <Route
           path="/patient/dashboard"
           element={
@@ -46,6 +63,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/patient/find-doctors"
           element={
@@ -54,6 +72,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/patient/appointments"
           element={
@@ -62,6 +81,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/patient/profile"
           element={
@@ -70,6 +90,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/patient/book-appointment/:doctorId"
           element={
@@ -79,10 +100,10 @@ const App = () => {
           }
         />
 
-        {/* doctor */}
-        {/* public route */}
+        {/* ================= DOCTOR ================= */}
+
         <Route path="/doctor/register" element={<DoctorRegister />} />
-        {/* protected routes */}
+
         <Route
           path="/doctor/dashboard"
           element={
@@ -91,6 +112,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/doctor/appointments"
           element={
@@ -99,6 +121,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/doctor/patients"
           element={
@@ -107,6 +130,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/doctor/profile"
           element={
@@ -116,8 +140,8 @@ const App = () => {
           }
         />
 
-        {/* admin  */}
-        {/* protected */}
+        {/* ================= ADMIN ================= */}
+
         <Route
           path="/admin/dashboard"
           element={
@@ -126,6 +150,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/doctors"
           element={
@@ -134,6 +159,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/patients"
           element={
@@ -142,6 +168,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/appointments"
           element={
@@ -150,6 +177,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/profile"
           element={
@@ -158,6 +186,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/admin/doctors/edit/:doctorId"
           element={
@@ -167,12 +196,21 @@ const App = () => {
           }
         />
 
-        {/* common routes  */}
+        {/* ================= COMMON ================= */}
+
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/services" element={<Services />} />
       </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 };

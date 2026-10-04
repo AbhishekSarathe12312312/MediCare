@@ -42,27 +42,32 @@ const VerifyOTP = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyan-500 mb-4">
-            <ShieldCheck size={28} className="text-white" />
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-3 py-5 sm:px-5 sm:py-6">
+      <div className="w-full max-w-xs sm:max-w-sm lg:max-w-md mx-auto">
+        {/* Logo / Header */}
+        <div className="text-center mb-5 sm:mb-6">
+          <div className="inline-flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-cyan-500 mb-3">
+            <ShieldCheck
+              size={21}
+              className="text-white sm:w-[23px] sm:h-[23px]"
+            />
           </div>
 
-          <h1 className="text-3xl font-bold text-white">Verify your email</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+            Verify your email
+          </h1>
 
-          <p className="text-slate-400 mt-2">
+          <p className="text-[11px] sm:text-xs lg:text-sm text-slate-400 mt-1.5">
             Enter the OTP sent to your email
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-xl">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             {/* OTP */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-[11px] sm:text-xs font-medium text-slate-300 mb-1.5">
                 Enter OTP
               </label>
 
@@ -77,7 +82,7 @@ const VerifyOTP = () => {
                 placeholder="Enter 6-digit OTP"
                 maxLength={6}
                 inputMode="numeric"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 px-4 text-center text-xl tracking-[0.5em] text-white placeholder:text-slate-500 outline-none focus:border-cyan-500"
+                className="w-full h-11 sm:h-12 bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 text-center text-lg sm:text-xl tracking-[0.4em] sm:tracking-[0.5em] text-white placeholder:text-slate-500 outline-none focus:border-cyan-500 transition"
               />
             </div>
 
@@ -85,32 +90,35 @@ const VerifyOTP = () => {
             <button
               type="submit"
               disabled={otp.length !== 6}
-              className="w-full bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-700 disabled:text-slate-500 text-white font-semibold py-3 rounded-xl transition"
+              className="w-full h-10 sm:h-11 bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-700 disabled:text-slate-500 text-white text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition cursor-pointer disabled:cursor-not-allowed"
             >
               Verify OTP
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-400 mt-6">
+          {/* Resend OTP */}
+          <p className="text-center text-[11px] sm:text-xs text-slate-400 mt-4 sm:mt-5">
             Didn't receive the OTP?
             <button
               type="button"
-              className="ml-1 text-cyan-400 hover:text-cyan-300 font-medium"
+              className="ml-1 text-cyan-400 hover:text-cyan-300 font-medium cursor-pointer"
             >
               Resend OTP
             </button>
           </p>
 
+          {/* Back */}
           <button
             type="button"
             onClick={() => navigate("/register")}
-            className="w-full text-center text-sm text-slate-500 hover:text-slate-300 mt-4"
+            className="w-full text-center text-[11px] sm:text-xs text-slate-500 hover:text-slate-300 mt-3 sm:mt-4 transition cursor-pointer"
           >
             ← Back to registration
           </button>
         </div>
 
-        <p className="text-center text-xs text-slate-600 mt-6">
+        {/* Footer */}
+        <p className="text-center text-[10px] sm:text-[11px] text-slate-600 mt-4 sm:mt-5">
           © 2026 MediCare. All rights reserved.
         </p>
       </div>

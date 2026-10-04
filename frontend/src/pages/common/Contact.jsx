@@ -28,17 +28,19 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950">
       {/* Header */}
-      <section className="bg-gradient-to-br from-blue-950/40 via-slate-950 to-slate-950">
-        <div className="max-w-7xl mx-auto px-6 py-20 text-center">
-          <p className="text-blue-500 font-medium">CONTACT US</p>
+      <section className="bg-gradient-to-br from-cyan-950/20 via-[#07111f] to-[#07111f]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-center">
+          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-cyan-400">
+            Contact Us
+          </span>
 
-          <h1 className="mt-3 text-4xl md:text-5xl font-bold">
-            We're Here to Help
+          <h1 className="mt-3 text-3xl sm:text-5xl font-bold tracking-tight text-white">
+            We&apos;re Here to Help
           </h1>
 
-          <p className="mt-5 text-slate-400 max-w-2xl mx-auto">
+          <p className="mt-4 text-xs sm:text-sm text-gray-400 max-w-xl mx-auto leading-relaxed">
             Have a question about MediCare or our healthcare services? Get in
             touch with our team.
           </p>
@@ -46,59 +48,87 @@ const Contact = () => {
       </section>
 
       {/* Contact Content */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Contact Info */}
-          <div className="space-y-5">
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <MapPin className="text-blue-500" size={25} />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Contact Info (Stacked / Grid on smaller screens) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-5">
+            <div className="bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-5 sm:p-6 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
+              <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
+                <MapPin className="text-cyan-400" size={20} />
+              </div>
 
-              <h3 className="mt-4 font-semibold">Our Location</h3>
+              <h3 className="mt-4 font-semibold text-sm sm:text-base text-white">
+                Our Location
+              </h3>
 
-              <p className="mt-2 text-slate-400">
+              <p className="mt-1.5 text-xs sm:text-sm text-gray-400">
                 Bhopal, Madhya Pradesh, India
               </p>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <Phone className="text-blue-500" size={25} />
+            <div className="bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-5 sm:p-6 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
+              <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
+                <Phone className="text-cyan-400" size={20} />
+              </div>
 
-              <h3 className="mt-4 font-semibold">Phone</h3>
+              <h3 className="mt-4 font-semibold text-sm sm:text-base text-white">
+                Phone
+              </h3>
 
-              <p className="mt-2 text-slate-400">+91 00000 00000</p>
+              <p className="mt-1.5 text-xs sm:text-sm text-gray-400">
+                +91 00000 00000
+              </p>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <Mail className="text-blue-500" size={25} />
+            <div className="bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-5 sm:p-6 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
+              <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
+                <Mail className="text-cyan-400" size={20} />
+              </div>
 
-              <h3 className="mt-4 font-semibold">Email</h3>
+              <h3 className="mt-4 font-semibold text-sm sm:text-base text-white">
+                Email
+              </h3>
 
-              <p className="mt-2 text-slate-400">support@medicare.com</p>
+              <p className="mt-1.5 text-xs sm:text-sm text-gray-400">
+                support@medicare.com
+              </p>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-              <Clock3 className="text-blue-500" size={25} />
+            <div className="bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-5 sm:p-6 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
+              <div className="w-11 h-11 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
+                <Clock3 className="text-cyan-400" size={20} />
+              </div>
 
-              <h3 className="mt-4 font-semibold">Working Hours</h3>
+              <h3 className="mt-4 font-semibold text-sm sm:text-base text-white">
+                Working Hours
+              </h3>
 
-              <p className="mt-2 text-slate-400">Monday - Saturday</p>
-
-              <p className="text-slate-400">9:00 AM - 6:00 PM</p>
+              <p className="mt-1.5 text-xs sm:text-sm text-gray-400">
+                Monday - Saturday
+              </p>
+              <p className="text-xs sm:text-sm text-gray-400">
+                9:00 AM - 6:00 PM
+              </p>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8">
-            <h2 className="text-2xl font-bold">Send Us a Message</h2>
+          <div className="lg:col-span-2 bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-6 sm:p-8 shadow-xl shadow-cyan-500/5">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Send Us a Message
+            </h2>
 
-            <p className="text-slate-400 mt-2">
+            <p className="text-xs sm:text-sm text-gray-400 mt-1.5">
               Fill out the form and our team will get back to you.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-              <div className="grid md:grid-cols-2 gap-5">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-6 sm:mt-8 space-y-4 sm:space-y-5"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
-                  <label className="block text-sm text-slate-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">
                     Name
                   </label>
 
@@ -109,12 +139,12 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter your name"
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full bg-[#07111f] border border-cyan-500/10 rounded-xl px-4 py-3 text-xs sm:text-sm font-medium text-white placeholder:text-gray-500 outline-none focus:border-cyan-500/40 transition shadow-lg shadow-cyan-500/5"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm text-slate-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">
                     Email
                   </label>
 
@@ -125,13 +155,13 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter your email"
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500"
+                    className="w-full bg-[#07111f] border border-cyan-500/10 rounded-xl px-4 py-3 text-xs sm:text-sm font-medium text-white placeholder:text-gray-500 outline-none focus:border-cyan-500/40 transition shadow-lg shadow-cyan-500/5"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm text-slate-300 mb-2">
+                <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5">
                   Message
                 </label>
 
@@ -140,17 +170,17 @@ const Contact = () => {
                   value={form.message}
                   onChange={handleChange}
                   required
-                  rows="6"
+                  rows="5"
                   placeholder="Write your message..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-blue-500 resize-none"
+                  className="w-full bg-[#07111f] border border-cyan-500/10 rounded-xl px-4 py-3 text-xs sm:text-sm font-medium text-white placeholder:text-gray-500 outline-none focus:border-cyan-500/40 transition shadow-lg shadow-cyan-500/5 resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-medium transition"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-gray-950 font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-cyan-500/20 text-xs sm:text-sm cursor-pointer"
               >
-                <Send size={18} />
+                <Send size={17} />
                 Send Message
               </button>
             </form>

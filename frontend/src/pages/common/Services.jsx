@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Stethoscope,
   HeartPulse,
@@ -9,6 +10,8 @@ import {
   ClipboardCheck,
   ArrowRight,
   CheckCircle2,
+  ShieldCheck,
+  Activity,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -103,95 +106,104 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950 mt-4">
+    <div className="min-h-screen bg-[#07111f] text-white selection:bg-cyan-500 selection:text-gray-950">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/20 via-[#07111f] to-[#07111f]" />
+      <section className="relative overflow-hidden pt-12 pb-20">
+        {/* Modern radial background glow matching reference site vibe */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#06b6d4_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/10 blur-[120px] pointer-events-none"></div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-28">
-          <div className="max-w-3xl">
-            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Medicare Services
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-6 shadow-sm shadow-cyan-500/10">
+              <Activity size={14} /> Advanced Healthcare Solutions
             </span>
 
-            <h1 className="mt-3 text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-white">
-              Healthcare Services
-              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                {" "}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+              Healthcare Services{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-500 bg-clip-text text-transparent">
                 You Can Trust
               </span>
             </h1>
 
-            <p className="mt-4 sm:mt-6 text-sm sm:text-base text-gray-400 leading-relaxed">
-              Explore our healthcare services and connect with qualified doctors
-              for your medical needs.
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              Explore our world-class healthcare services and connect seamlessly
+              with qualified medical specialists tailored to your needs.
             </p>
 
-            <button
-              onClick={() => navigate("/find-doctors")}
-              className="mt-6 sm:mt-8 inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 px-6 py-3.5 rounded-xl font-bold text-gray-950 transition shadow-lg shadow-cyan-500/20 text-xs sm:text-sm cursor-pointer"
-            >
-              Find a Doctor
-              <ArrowRight size={18} />
-            </button>
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <button
+                onClick={() => navigate("/find-doctors")}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 px-8 py-4 rounded-xl font-bold text-gray-950 transition-all duration-200 shadow-lg shadow-cyan-500/25 text-sm cursor-pointer hover:-translate-y-0.5"
+              >
+                Find a Doctor
+                <ArrowRight size={18} />
+              </button>
+              <button
+                onClick={() => navigate("/find-doctors")}
+                className="inline-flex items-center gap-2 bg-[#0b1728] hover:bg-[#0f223c] px-8 py-4 rounded-xl font-bold text-cyan-400 border border-cyan-500/20 transition-all duration-200 text-sm cursor-pointer"
+              >
+                Explore Specialties
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <div className="text-center max-w-2xl mx-auto">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-cyan-400">
             What We Offer
           </span>
-
           <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
             Our Healthcare Services
           </h2>
-
-          <p className="mt-3 text-xs sm:text-sm text-gray-400">
+          <p className="mt-3 text-sm text-gray-400">
             From routine consultations to specialized care, MediCare provides a
-            convenient healthcare experience.
+            reliable and streamlined healthcare experience.
           </p>
         </div>
 
-        <div className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => {
             const Icon = service.icon;
 
             return (
               <div
                 key={service.title}
-                className="group bg-[#0b1728]/80 backdrop-blur-md border border-cyan-500/10 rounded-2xl p-6 hover:border-cyan-500/30 hover:-translate-y-1 transition duration-300 shadow-xl shadow-cyan-500/5 flex flex-col justify-between"
+                className="group relative bg-[#0b1728]/80 backdrop-blur-xl border border-cyan-500/10 rounded-2xl p-6 hover:border-cyan-500/40 hover:-translate-y-1.5 transition-all duration-300 shadow-xl shadow-cyan-500/5 flex flex-col justify-between overflow-hidden"
               >
+                {/* Subtle top hover glow effect */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
                 <div>
                   {/* Icon */}
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-gray-950 transition shadow-lg shadow-cyan-500/5">
-                    <Icon size={24} />
+                  <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500 group-hover:text-gray-950 transition-all duration-300 shadow-lg shadow-cyan-500/5">
+                    <Icon size={26} />
                   </div>
 
                   {/* Title */}
-                  <h3 className="mt-5 sm:mt-6 text-lg sm:text-xl font-semibold text-white">
+                  <h3 className="mt-5 text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm text-gray-400 leading-relaxed">
+                  <p className="mt-2.5 text-xs sm:text-sm text-gray-400 leading-relaxed">
                     {service.description}
                   </p>
 
                   {/* Points */}
-                  <div className="mt-4 sm:mt-5 space-y-2">
+                  <div className="mt-5 pt-4 border-t border-cyan-500/10 space-y-2">
                     {service.points.map((point) => (
                       <div
                         key={point}
-                        className="flex items-center gap-2 text-xs sm:text-sm text-gray-300"
+                        className="flex items-center gap-2 text-xs text-gray-300"
                       >
                         <CheckCircle2
-                          size={16}
+                          size={15}
                           className="text-cyan-400 shrink-0"
                         />
-
                         <span>{point}</span>
                       </div>
                     ))}
@@ -201,12 +213,12 @@ const Services = () => {
                 {/* Button */}
                 <button
                   onClick={() => navigate("/find-doctors")}
-                  className="mt-6 inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-xs sm:text-sm font-semibold cursor-pointer"
+                  className="mt-6 pt-4 border-t border-cyan-500/10 inline-flex items-center justify-between w-full text-cyan-400 group-hover:text-cyan-300 text-xs sm:text-sm font-semibold cursor-pointer"
                 >
-                  Find Doctor
+                  <span>Find Doctor</span>
                   <ArrowRight
                     size={16}
-                    className="group-hover:translate-x-1 transition"
+                    className="group-hover:translate-x-1.5 transition-transform duration-200"
                   />
                 </button>
               </div>
@@ -216,89 +228,84 @@ const Services = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="bg-[#0b1728]/50 border-y border-cyan-500/10 py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
+      <section className="bg-[#0b1728]/40 border-y border-cyan-500/10 py-20 my-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-cyan-400">
               Why Medicare
             </span>
-
             <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
               Healthcare Made Simple
             </h2>
-
-            <p className="mt-3 text-xs sm:text-sm text-gray-400">
-              Everything you need to make your healthcare journey easier and
-              more convenient.
+            <p className="mt-3 text-sm text-gray-400">
+              Everything you need to make your medical journey smooth, secure,
+              and stress-free.
             </p>
           </div>
 
-          <div className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-6 sm:p-7 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
-                <Stethoscope size={24} className="text-cyan-400" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-8 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg mb-5">
+                <Stethoscope size={24} />
               </div>
-
-              <h3 className="mt-4 sm:mt-5 text-lg sm:text-xl font-semibold text-white">
+              <h3 className="text-xl font-bold text-white">
                 Qualified Doctors
               </h3>
-
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-400 leading-relaxed">
-                Connect with doctors across different medical specializations.
+              <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+                Connect with verified, experienced doctors across multiple
+                medical specializations.
               </p>
             </div>
 
-            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-6 sm:p-7 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
-                <ClipboardCheck size={24} className="text-cyan-400" />
+            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-8 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg mb-5">
+                <ClipboardCheck size={24} />
               </div>
-
-              <h3 className="mt-4 sm:mt-5 text-lg sm:text-xl font-semibold text-white">
+              <h3 className="text-xl font-bold text-white">
                 Easy Appointments
               </h3>
-
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-400 leading-relaxed">
-                Find a doctor and book your appointment through a simple online
-                process.
+              <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+                Book and manage your doctor consultations seamlessly through our
+                simple online portal.
               </p>
             </div>
 
-            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-6 sm:p-7 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shadow-lg shadow-cyan-500/5">
-                <HeartPulse size={24} className="text-cyan-400" />
+            <div className="bg-[#07111f] border border-cyan-500/10 rounded-2xl p-8 shadow-xl shadow-cyan-500/5 hover:border-cyan-500/30 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg mb-5">
+                <ShieldCheck size={24} />
               </div>
-
-              <h3 className="mt-4 sm:mt-5 text-lg sm:text-xl font-semibold text-white">
-                Patient Focused
-              </h3>
-
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-gray-400 leading-relaxed">
-                Designed to provide a smooth and convenient healthcare
-                experience.
+              <h3 className="text-xl font-bold text-white">Patient Focused</h3>
+              <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+                Dedicated support and secure health record handling designed
+                around your comfort and privacy.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-cyan-500 to-teal-500 p-8 sm:p-14 text-center shadow-xl shadow-cyan-500/10">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-950 tracking-tight">
-            Need to See a Doctor?
-          </h2>
+      {/* CTA Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-cyan-500 via-teal-400 to-cyan-400 p-10 sm:p-14 text-center shadow-2xl shadow-cyan-500/15">
+          {/* Background overlay pattern */}
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#07111f_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
-          <p className="mt-3 text-xs sm:text-sm text-gray-900 font-medium max-w-xl mx-auto">
-            Find the right doctor and book your appointment today.
-          </p>
-
-          <button
-            onClick={() => navigate("/find-doctors")}
-            className="mt-6 sm:mt-8 inline-flex items-center gap-2 bg-[#07111f] text-white px-7 py-3.5 rounded-xl font-bold hover:bg-[#0b1728] transition shadow-lg text-xs sm:text-sm cursor-pointer"
-          >
-            Find Doctors
-            <ArrowRight size={18} />
-          </button>
+          <div className="relative z-10 max-w-xl mx-auto">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-950 tracking-tight">
+              Need to See a Doctor?
+            </h2>
+            <p className="mt-3 text-sm text-gray-900 font-medium">
+              Find the right medical expert and book your appointment instantly
+              today.
+            </p>
+            <button
+              onClick={() => navigate("/find-doctors")}
+              className="mt-8 inline-flex items-center gap-2 bg-[#07111f] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#0b1728] transition-all duration-200 shadow-xl text-sm cursor-pointer hover:-translate-y-0.5"
+            >
+              Find Doctors Now
+              <ArrowRight size={18} />
+            </button>
+          </div>
         </div>
       </section>
     </div>
